@@ -1,0 +1,97 @@
+{%extends 'base.html'%}
+{%load staticfiles%}
+{%block content%}
+    <div align="center">
+    <div class="span8">
+        {%if card%}
+            <h2>Введите код карты: {{number}}</h2><br>
+        {%else%}
+            <h1>Введите номер карты</h1><br>
+            <!--Для изменения поведения js-функции в зависимости от того что мы вводим. Пароль или номер карты.-->
+            <script> var ItSPASS = false; </script>
+        {%endif%}
+
+        <form action="/home/" method="post">
+                {%csrf_token%}
+                <input class="span4" id="number" value="" placeholder="Введите номер карты" type="text" name="number" readonly>
+                <input class="btn btn-success btn-large" type="submit" value="Подтвердить">
+        </form>
+
+        {%if card%}
+        <!--При вводе пароля перенастраиваем форму ввода.-->
+        <script>
+            var ItSPASS = true;
+            var n = document.getElementById('number');
+            n.name="passw";     n.type = "password";    n.maxLength = 4;
+            n.placeholder="Введите пароль карты";
+        </script>
+        {%endif%}
+
+        <!--Клавишы для ввода цифр.-->
+        <table>
+            <tr><td>
+                 <div class="btn-group">
+                    <button class="btn btn-large" onclick="Click(1)">1</button>
+                    <button class="btn btn-large" onclick="Click(2)">2</button>
+                    <button class="btn btn-large" onclick="Click(3)">3</button>
+                 </div></td>
+            </tr>
+            <tr><td>
+                 <div class="btn-group">
+                    <button class="btn btn-large" onclick="Click(4)">4</button>
+                    <button class="btn btn-large" onclick="Click(5)">5</button>
+                    <button class="btn btn-large" onclick="Click(6)">6</button>
+                 </div></td>
+            </tr>
+            <tr><td>
+                 <div class="btn-group">
+                    <button class="btn btn-large" onclick="Click(7)">7</button>
+                    <button class="btn btn-large" onclick="Click(8)">8</button>
+                    <button class="btn btn-large" onclick="Click(9)">9</button>
+                 </div></td>
+            </tr>
+            <tr><td>
+                 <div class="btn-group">
+                     <button class="btn btn-info btn-large" onclick="Click(10)"><</button>
+                    <button class="btn btn-large" onclick="Click(0)">0</button>
+                    <button class="btn btn-large btn-danger" onclick="Click(11)">X</button>
+                 </div></td>
+            </tr>
+        </table>
+        </div>
+        <div class="span3">
+            {%if card%}
+            <form action="/home/" method="post">
+                    {%csrf_token%}
+                    <input class="btn btn-danger btn-large" name="exit" type="submit" value="Выход">
+            </form>
+            {%endif%}
+        </div>
+          </div>
+
+    <script>
+
+    // Для набора цифр в поле ввода номера карты и пароля и контроль ограничений
+    // Также добавление разделителей для вида номера: 2654-0065-5406-6589
+    function Click(i){
+        var n = document.getElementById('number');
+
+        if(i==10)                   n.value = n.value.substring(0, n.value.length-1);   // Удаляем последний символ
+        else if(i==11)              n.value="";                                         // Очищаем поле ввода
+        else if(n.value.length>18)  return true;                                        // Когда больше 18 не вводим
+        else if(n.value.length==4)  return true;                                        // Когда 4 - пин-код, не вводим
+        else                        n.value = n.value + i.toString();                   // Иначе вводим нажатую кнопку
+
+        if(ItSPASS && n.value.length==4) return true;                                   // Если вводим пароль после ввода
+                                                                                        // 4-го символа не продолжаем
+        var last = n.value[n.value.length-1];                                           // Последний введеный символ
+
+        if(n.value.length == 4 || n.value.length == 9 || n.value.length == 14)
+            n.value = n.value + "-" ;                                                   // После каждой четверки разделитель
+        if(!isNumber(last))         n.value = n.value.substring(0, n.value.length-1)    // Если последний не цифра - удалить.
+    };
+
+    // Проверка являеться ли входня строка числом
+    function isNumber(s){ return !isNaN(s) ? true : false; }
+</script>
+{%endblock%}

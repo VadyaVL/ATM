@@ -1,0 +1,13 @@
+{%extends 'base.html'%}
+{%load staticfiles%}
+
+{%block content%}
+        {%if type == 1%}
+            <h2>{{Title}}</h2>
+            <p>{{mess}}</p>
+        {%endif%}
+        <form action="/home/">
+            <input type="submit" class="btn btn-large btn-danger" value="Назад">
+        </form>
+
+{%endblock%}

@@ -1,0 +1,17 @@
+{%extends 'base.html'%}
+{%load staticfiles%}
+
+{%block content%}
+<div class="span5">
+    <h2>Добавление новой банковской карточки</h2>
+    <form action="/add/" method="post">
+        {%csrf_token%}
+        <label>Номер: </label>   <input name="n" type="text">
+        <label>Пароль: </label>  <input name="p" type="text">
+        <label>Баланс: </label>  <input name="m" type="number" step="0.01">
+        <br>
+        <input class="btn btn-success btn-large" type="submit" value="Добавить">
+    </form>
+</div>
+
+{%endblock%}

@@ -1,0 +1,24 @@
+{%extends 'base.html'%}
+{%load staticfiles%}
+
+{%block content%}
+    <h2>Просмотр всех банковских карт и операций</h2>
+    <!--Просмотр банковских карт-->
+    <table style="width:100%" border="1">
+        <tr><td>Номер карты</td><td>Пароль</td><td>Баланс</td>
+        <td>Неверный пароль</td><td>Заблокирована</td> </tr>
+            {%for inf in list%}
+                <tr><td>{{inf.Number}}</td><td>{{inf.Password}}</td> <td>{{inf.Balance}}</td>
+                    <td>{{inf.FailCount}}</td> <td>{{inf.Locked}}</td></tr>
+            {%endfor%}
+    </table>
+    <br><!--Просмотр операций-->
+    <table style="width:100%" border="1">
+        <tr> <td>Идентификатор</td> <td>Время</td>
+        <td>Сообщение</td> <td>Номер карты</td></tr>
+            {%for inf in oplist%}
+                <tr> <td>{{inf.id}}</td> <td>{{inf.DateT}}</td> <td>{{inf.Message}}</td>
+                    <td>{{inf.Card_Number.Number}}</td></tr>
+            {%endfor%}
+    </table>
+{%endblock%}
